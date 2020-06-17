@@ -106,11 +106,18 @@ function getWinners(game) {
         
         let homeWon = items["Home Team Goals"] > items["Away Team Goals"];
         let awayWon = items["Home Team Goals"] < items["Away Team Goals"];
+        let winningConditions = items["Win conditions"].split(" ");
         
-        if(homeWon){
-            winners.push(homeTeamName);
-        } else if(awayWon){
-            winners.push(awayTeamName);
+        
+        for(let i = 0; i < winningConditions.length; i++){
+            let homeWinningConditions = winningConditions[i] === homeTeamName;
+            let awayWinningConditions = winningConditions[i] === awayTeamName;
+            
+            if(homeWon || homeWinningConditions){
+                winners.push(homeTeamName);
+            } else if(awayWon || awayWinningConditions){
+                winners.push(awayTeamName);
+            }
         }
     });
     
