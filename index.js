@@ -128,32 +128,66 @@ Parameters:
  */
 
 function getWinnersByYear(finalsData, winnersCountry, yearsWon) {
-    const results = finalsData.map(function(element){
+    // the return array
+    const results = [];
+
+    // sorting the 
+    finalsData.forEach(function(items){
+        //simplify the calls
         let homeTeamName = items['Home Team Name'];
         let awayTeamName = items['Away Team Name'];
+        let year = items['Year'];
         
+        // calc how has more goals
         let homeWon = items["Home Team Goals"] > items["Away Team Goals"];
         let awayWon = items["Home Team Goals"] < items["Away Team Goals"];
         
+        //if team won pass it to result has an object
         if(homeWon){
-            winners.push(homeTeamName);
+            results.push({
+                "Home Team Name": homeTeamName,
+                "Year": year
+            })
         } else if(awayWon){
-            winners.push(awayTeamName);
+            results.push({
+                "Away Team Name": awayTeamName,
+                "Year": year
+            });
         } 
     });
-}
-getWinnersByYear(fifaFinals, getWinners, getYears);
 
+    return results;
+}
+const fifaFinalsWinnersByYear = getWinnersByYear(fifaFinals, getWinners, getYears)
+
+console.log(fifaFinalsWinnersByYear)
 /* Task 7: Write a function called `getAverageGoals` that accepts a parameter `data` and returns the the average number of home team goals and away team goals scored per match (Hint: use .reduce and do this in 2 steps) */
 
-function getAverageGoals(/* code here */) {
+function getAverageGoals(data) {
 
     /* code here */
-
+    const averageScores = [];
+    const totalHomeGoals = data.reduce(function(adder, item){
+        return adder + item["Home Team Goals"];
+    }, 0);
+    const totalAwayGoals = data.reduce(function(adder, item){
+        return adder + item["Away Team Goals"];
+    }, 0);
+    const totalGames = data.length;
+    const homeTeamAverageGoals = (totalHomeGoals/totalGames).toFixed(2);
+    const awayTeamAverageGoals = (totalAwayGoals/totalGames).toFixed(2);
+    averageScores.push(
+        {"Homes Team Average goals": homeTeamAverageGoals}
+    )
+    averageScores.push(
+        {"Away Team Average goals": awayTeamAverageGoals}
+    )
+    
+    return averageScores;
 };
 
-getAverageGoals();
 
+console.log(getAverageGoals(fifaFinals))
 /// STRETCH 🥅 //
 
 /* Stretch 1: Create a function called `getCountryWins` that takes the parameters `data` and `team initials` and returns the number of world cup wins that country has had. 
